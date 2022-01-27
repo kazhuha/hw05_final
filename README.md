@@ -1,3 +1,21 @@
-# hw05_final
+# yatube_project
+### Описание
+Социальная сеть блогеров
+### Технологии
+Django==2.2.19
+pytz==2021.3
+sqlparse==0.4.2
+### Запуск проекта в dev-режиме
+- Слонируйте проект из github
+- Установите и активируйте виртуальное окружение
+- Установите зависимости из файла requirements.txt
+```
+pip install -r requirements.txt
+``` 
+- В папке с файлом manage.py выполните команду:
+```
+python3 manage.py runserver
+```
 
-[![CI](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml/badge.svg?branch=master)](https://github.com/yandex-praktikum/hw05_final/actions/workflows/python-app.yml)
+### Автор
+Кожушкевич Александр 
