@@ -1,4 +1,3 @@
-from genericpath import exists
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth.decorators import login_required
 
@@ -125,7 +124,9 @@ def follow_index(request):
 def profile_follow(request, username):
     folower = request.user
     author = get_object_or_404(User, username=username)
-    if Follow.objects.filter(user=folower, author=author).exists() or folower == author:
+    if Follow.objects.filter(
+        user=folower, author=author
+    ).exists() or folower == author:
         return redirect('posts:follow_index')
     else:
         Follow.objects.create(
