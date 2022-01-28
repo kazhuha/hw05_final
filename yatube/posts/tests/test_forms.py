@@ -104,7 +104,7 @@ class PostFormTests(TestCase):
                 pk=last_post.pk,
                 text=self.form_data['text'],
                 group=self.form_data['group'],
-                image='posts/small.gif'
+                image=f'posts/{self.uploaded_1.name}'
             ).exists()
         )
 
@@ -186,6 +186,7 @@ class PostFormTests(TestCase):
         self.assertTrue(
             Comment.objects.filter(
                 pk=last_comment.pk,
-                text=data['text']
+                text=data['text'],
+                post=self.post.pk
             ).exists()
         )

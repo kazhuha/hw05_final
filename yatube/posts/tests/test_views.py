@@ -64,6 +64,11 @@ class PostsPagesTests(TestCase):
             text='Тестовый комментарий'
         )
         cls.guest_client = Client()
+        cls.following = Follow.objects.create(
+            user=cls.user_1,
+            author=cls.user_2
+        )
+        cls.follow_cnt = Follow.objects.count()
 
     @classmethod
     def tearDownClass(cls):
@@ -252,20 +257,33 @@ class PostsPagesTests(TestCase):
         self.assertNotEqual(content_1, content_3)
 
     def test_following_authorized_only(self):
-        """Проверка подписок и отписок авторизованным пользователем"""
-        follow_cnt = Follow.objects.count()
+        """Проверка подписок авторизованным пользователем"""
+        # попытка подписки неавторизованным пользователем
         self.client.post(
             reverse('posts:profile_follow', kwargs={'username': self.user_1})
         )
-        self.assertEqual(Follow.objects.count(), follow_cnt)
-        self.authorized_client.post(
-            reverse('posts:profile_follow', kwargs={'username': self.user_2})
+        self.assertEqual(Follow.objects.count(), self.follow_cnt)
+        self.another_authorized_client.post(
+            reverse('posts:profile_follow', kwargs={'username': self.user_1})
         )
-        self.assertEqual(Follow.objects.count(), follow_cnt + 1)
+        self.assertTrue(
+            Follow.objects.filter(
+                user=self.user_2,
+                author=self.user_1
+            ).exists()
+        )
+
+    def test_unfollowing(self):
+        """Проверка отписки от автора"""
         self.authorized_client.post(
             reverse('posts:profile_unfollow', kwargs={'username': self.user_2})
         )
-        self.assertEqual(Follow.objects.count(), follow_cnt)
+        self.assertFalse(
+            Follow.objects.filter(
+                user=self.user_1,
+                author=self.user_2
+            ).exists()
+        )
 
     def test_follower_context(self):
         """Проверка ленты фоловеров"""
