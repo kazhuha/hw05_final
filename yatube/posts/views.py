@@ -12,7 +12,10 @@ follow_index_page = 'posts:follow_index'
 def index(request):
     template = 'posts/index.html'
     paginator = paginate(request, Post.objects.select_related('group').all())
-    context = {'page_obj': paginator}
+    context = {
+        'page_obj': paginator,
+        'index': True
+    }
     return render(request, template, context)
 
 
@@ -115,7 +118,10 @@ def follow_index(request):
     paginator = paginate(
         request, Post.objects.filter(author__following__user=follower)
     )
-    context = {'page_obj': paginator}
+    context = {
+        'page_obj': paginator,
+        'follow': True
+    }
     return render(request, template, context)
 
 
@@ -123,14 +129,12 @@ def follow_index(request):
 def profile_follow(request, username):
     folower = request.user
     author = get_object_or_404(User, username=username)
-    if folower == author:
-        return redirect(follow_index_page)
-    else:
+    if folower != author:
         Follow.objects.get_or_create(
             user=folower,
             author=author
         )
-        return redirect(follow_index_page)
+    return redirect(follow_index_page)
 
 
 @login_required
