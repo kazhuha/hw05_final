@@ -9,6 +9,10 @@
 ### Запуск проекта в dev-режиме
 - Слонируйте проект из github
 - Установите и активируйте виртуальное окружение
+```
+python3 -m venv venv
+source venv/bin/activate
+``` 
 - Установите зависимости из файла requirements.txt
 ```
 pip install -r requirements.txt
